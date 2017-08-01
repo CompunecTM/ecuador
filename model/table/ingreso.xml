@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : ingreso.xml
+-->
+<tabla>
+   <columna>
+      <nombre>codingreso</nombre>
+      <tipo>number int(11)</tipo>
+   </columna>
+   <columna>
+      <nombre>codcliente</nombre>
+      <tipo>character varying(6)</tipo>
+   </columna>
+   <columna>
+      <nombre>nombrecliente</nombre>
+      <tipo>character varying(100)</tipo>
+   </columna>
+   <columna>
+      <nombre>fecha</nombre>
+      <tipo>date</tipo>
+   </columna>
+   <columna>
+      <nombre>tipoingreso</nombre>
+      <tipo>character varying(1)</tipo>
+   </columna>
+   <columna>
+      <nombre>descripcion</nombre>
+      <tipo>character varying(200)</tipo>
+   </columna>
+   <columna>
+      <nombre>referencia</nombre>
+      <tipo>character varying(11)</tipo>
+   </columna>
+   <columna>
+      <nombre>total</nombre>
+      <tipo>number int(11)</tipo>
+   </columna>
+   <restriccion>
+      <nombre>ingreso_pkey</nombre>
+      <consulta>PRIMARY KEY (codingreso)</consulta>
+   </restriccion>
+</tabla>
