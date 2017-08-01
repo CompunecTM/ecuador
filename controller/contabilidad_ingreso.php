@@ -3,6 +3,8 @@
 * 
 */
 
+require_model('ingreso.php');
+
 class contabilidad_ingreso extends fs_controller
 {
 
@@ -40,7 +42,9 @@ class contabilidad_ingreso extends fs_controller
     }
 
     public function crear_ingreso(){
+    	$ing= new ingreso();
 
+    	$aux=$ing->save();
     }
 
 

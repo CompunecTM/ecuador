@@ -9,7 +9,7 @@
 		  <li class="active">Nuevo Ingreso</li>
 		</ol>
 	</nav>
-	<form action="">
+	<form name="f_nuevo_ingreso" action="index.php?page=contabilidad_ingreso&amp;tipo=crear_ingreso" method="post" class="form">
 	<div class="jumbotron"  style="border: 1px solid #DDDDDD">
 {if="$fsc->nuevo_ingreso()==true"}
 	{loop="$fsc->nuevo_ingreso()"}
@@ -102,7 +102,7 @@
 		</div>
 		<br>
 		<div class="row text-right">
-			<button class="btn btn-sm btn-primary" type="button">
+			<button class="btn btn-sm btn-primary" type="button" onclick="this.disabled = true;this.form.submit();">
                <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar...
             </button>
 		</div>
