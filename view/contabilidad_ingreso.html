@@ -9,7 +9,7 @@
 		  <li class="active">Nuevo Ingreso</li>
 		</ol>
 	</nav>
-	<form name="f_nueva_venta" action="index.php?page=contabilidad_ingreso&amp;tipo=crear_ingreso" method="post" class="form">
+	<form action="">
 	<div class="jumbotron"  style="border: 1px solid #DDDDDD">
 {if="$fsc->nuevo_ingreso()==true"}
 	{loop="$fsc->nuevo_ingreso()"}
@@ -168,7 +168,7 @@
             </form>
          </div>
          <div class="modal-body bg-info">
-            <form action="index.php?page=contabilidad_ingreso&amp;tipo=crear_ingresop" method="post" class="form-horizontal">
+            <form action="index.php?page=nueva_venta&amp;tipo=pedido" method="post" class="form-horizontal">
                <input type="hidden" name="cliente">
                <div class="form-group">
                   <label class="col-sm-2 control-label">Nombre</label>
@@ -203,6 +203,7 @@
                   <button class="btn btn-sm btn-primary" type="submit">
                      <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar y seleccionar
                   </button>
+               </div>
             </form>
          </div>
       </div>
