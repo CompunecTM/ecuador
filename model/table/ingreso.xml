@@ -5,35 +5,43 @@
 <tabla>
    <columna>
       <nombre>codingreso</nombre>
-      <tipo>number int(11)</tipo>
+      <tipo>serial</tipo>
+      <nulo>NO</nulo>
    </columna>
    <columna>
       <nombre>codcliente</nombre>
       <tipo>character varying(6)</tipo>
+      <nulo>NO</nulo>
    </columna>
    <columna>
       <nombre>nombrecliente</nombre>
       <tipo>character varying(100)</tipo>
+      <nulo>NO</nulo>
    </columna>
    <columna>
       <nombre>fecha</nombre>
       <tipo>date</tipo>
+      <nulo>NO</nulo>
    </columna>
    <columna>
       <nombre>tipoingreso</nombre>
       <tipo>character varying(1)</tipo>
+      <nulo>NO</nulo>
    </columna>
    <columna>
       <nombre>descripcion</nombre>
-      <tipo>character varying(200)</tipo>
+      <tipo>text</tipo>
+      <nulo>YES</nulo>
    </columna>
    <columna>
       <nombre>referencia</nombre>
       <tipo>character varying(11)</tipo>
+      <nulo>NO</nulo>
    </columna>
    <columna>
       <nombre>total</nombre>
-      <tipo>number int(11)</tipo>
+      <tipo>double precision</tipo>
+      <nulo>NO</nulo>
    </columna>
    <restriccion>
       <nombre>ingreso_pkey</nombre>

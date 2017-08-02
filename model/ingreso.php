@@ -39,7 +39,7 @@ class ingreso extends fs_model
       }
    }
 
-   public function install()
+   protected function install()
    {
       return '';
    }
