@@ -34,9 +34,14 @@
       <nulo>YES</nulo>
    </columna>
    <columna>
+      <nombre>tipopago</nombre>
+      <tipo>character varying(10)</tipo>
+      <nulo>NO</nulo>
+   </columna>
+   <columna>
       <nombre>referencia</nombre>
       <tipo>character varying(11)</tipo>
-      <nulo>NO</nulo>
+      <nulo>YES</nulo>
    </columna>
    <columna>
       <nombre>total</nombre>

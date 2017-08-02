@@ -3,40 +3,42 @@
 /// la clase se debe llamar igual que el archivo
 class ingreso extends fs_model
 {
-   public $codingreso;   
-   public $codcliente;   
-   public $nombrecliente;   
-   public $fecha;   
-   public $tipoingreso;   
-   public $descripcion;   
-   public $referencia;   
-   public $total;   
+   private $codingreso;   
+   private $codcliente;   
+   private $nombrecliente;   
+   private $fecha;   
+   private $tipoingreso;   
+   private $descripcion; 
+   private $tipopago;  
+   private $referencia;   
+   private $total;   
 
-   public function __construct($d = FALSE)
+   public function __construct($set_datos = FALSE)
    {
       parent::__construct('ingreso'); /// aquí indicamos el NOMBRE DE LA TABLA
-      if($d)
+      if($set_datos)
       {
-         $this->codingreso= $this->insval($d['codingreso']);
-         $this->codcliente= $d['codcliente'];
-         $this->nombrecliente= $d['nombrecliente']; 
-         $this->fecha= $d['fecha'];  
-         $this->tipoingreso= $d['tipoingreso'];  
-         $this->descripcion= $d['descripcion']; 
-         $this->referencia= $d['referencia'];  
-         $this->total= $d['total'];   
+         $this->codcliente= $set_datos['codcliente'];
+         $this->nombrecliente= $set_datos['nombrecliente']; 
+         $this->fecha= Date('d-m-Y', strtotime($set_datos['fecha'])); 
+         $this->tipoingreso= $set_datos['tipoingreso'];  
+         $this->descripcion= $set_datos['descripcion']; 
+         $this->tipopago= $set_datos['tipopago'];
+         $this->referencia= $set_datos['referencia'];  
+         $this->total= $set_datos['total'];   
       }
       else
-      {
-         $this->codingreso= null;   
+      {  
          $this->codcliente= null;   
          $this->nombrecliente= null;   
-         $this->fecha= null;   
+         $this->fecha= Date('d-m-Y');   
          $this->tipoingreso= null;   
-         $this->descripcion= null;   
+         $this->descripcion= null; 
+         $this->tipopago= null;  
          $this->referencia= null;   
          $this->total= null;   
       }
+
    }
 
    protected function install()
@@ -65,14 +67,15 @@ class ingreso extends fs_model
       else
       {
          $sql = "INSERT INTO ".$this->table_name." 
-         (codcliente,nombrecliente,fecha,tipoingreso,descripcion,referencia,total) 
-         VALUES ( ".$this->codcliente.",   
-                  ".$this->nombrecliente.",  
-                  ".$this->fecha.",  
-                  ".$this->tipoingreso.",   
-                  ".$this->descripcion.",  
-                  ".$this->referencia.",  
-                  ".$this->total.")";
+         (codcliente,nombrecliente,fecha,tipoingreso,descripcion,tipopago,referencia,total) 
+         VALUES ( ".$this->var2str($this->codcliente).",   
+                  ".$this->var2str($this->nombrecliente).",  
+                  ".$this->var2str($this->fecha).",  
+                  ".$this->var2str($this->tipoingreso).",   
+                  ".$this->var2str($this->descripcion).",  
+                  ".$this->var2str($this->tipopago).",
+                  ".$this->var2str($this->referencia).",  
+                  ".$this->var2str($this->total).")";
       }
       
       return $this->db->exec($sql);
@@ -81,6 +84,10 @@ class ingreso extends fs_model
    public function delete()
    {
       return $this->db->exec("DELETE FROM ".$this->table_name." WHERE codingreso = ".$this->var2str($this->codingreso).";");
+   }
+
+   public function all(){
+      return $this->db->select("SELECT * FROM ".$this->table_name." ORDER BY fecha desc");
    }
 }
 ?>
