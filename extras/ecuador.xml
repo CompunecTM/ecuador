@@ -6,7 +6,45 @@
 -->
 <ejercicio>
 <cuenta_especial>
-	<idcuentaesp>ACREED</idcuentaesp><descripcion>Q3VlbnRhcyBkZSBhY3JlZWRvcmVz</descripcion></cuenta_especial>
+	<idcuentaesp>IVAREP</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBJVkEgcmVwZXJjdXRpZG8=</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>IVASOP</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBJVkEgc29wb3J0YWRv</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>ACREED</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBhY3JlZWRvcmVz</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>CAJA</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBjYWph</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>CLIENT</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBjbGllbnRlcw==</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>COMPRA</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBjb21wcmFz</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>PROVEE</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSBwcm92ZWVkb3Jlcw==</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>IRPF</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSByZXRlbmNpb25lcyBJUlBG</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>IRPFPR</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSByZXRlbmNpb25lcyBwYXJhIHByb3ZlZWRvcmVzIElSUEZQUg==</descripcion>
+</cuenta_especial>
+<cuenta_especial>
+	<idcuentaesp>VENTAS</idcuentaesp>
+	<descripcion>Q3VlbnRhcyBkZSB2ZW50YXM=</descripcion>
+</cuenta_especial>
 <epigrafe>
 	<codgrupo/>
 	<codpadre/><codepigrafe>1</codepigrafe>
