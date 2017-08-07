@@ -170,10 +170,12 @@
 			
 		</div>
 	</div>
-{if="$fsc->listar_pedido()==true"}
+
 	<div class="form-group tingresop" style="display: none">
 		<h3>Pedido</h3>
 		<hr>
+{if="$fsc->listar_pedido()==true"}
+	
 		<div class="row">
 			<table class="table table-hover">
 		      <thead>
@@ -213,18 +215,22 @@
 			</div>
 		</div>
 		<br>
-		<div class="row text-right">
-			<button class="btn btn-sm btn-primary" type="button" onclick="this.disabled = true;this.form.submit();">
-               <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar...
-            </button>
-		</div>
 {/if}
+</div>
 	<div class="form-group tingresor" style="display: none">
 		<h3>Retención</h3>
 		<hr>
 		<div class="row">
 			
 		</div>
+	</div>
+	<div class="row text-right">
+		<button class="btn btn-sm btn-primary button" type="button" onclick="this.disabled = true;this.form.submit();" disabled >
+           <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar...
+        </button>
+        <a class="btn btn-sm btn-danger" type="button" href="index.php?page=contabilidad_ingreso">
+           <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Cancelar
+        </a>
 	</div>
 	</form>
 </div>
@@ -248,7 +254,7 @@
 			</div>			
 			<div class="col-sm-3 ">
 				<label for="t_ingreso">Tipo de Ingreso</label>
-				<select class="form-control" id="t_ingreso" name="t_ingreso">
+				<select class="form-control" id="t_ingreso" name="t_ingreso" disabled="disabled">
 					<option value='none'>Seleccione</option>
 					<option value='D' {if="$value['tipoingreso']=='D'"} selected {/if}>Ingreso directo</option>
 					<option value='P' {if="$value['tipoingreso']=='P'"} selected {/if}>Pedido</option>
@@ -334,7 +340,11 @@
 			<button class="btn btn-sm btn-primary" type="button" onclick="this.disabled = true;this.form.submit();">
                <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar...
             </button>
-		</div>
+            <a class="btn btn-sm btn-danger" type="button" href="index.php?page=contabilidad_ingreso">
+               <span class="glyphicon glyphicon-remove"></span>&nbsp; Cancelar
+            </a>
+
+	</div>
 	<div class="form-group tingresor" style="display: none">
 		<h3>Retención</h3>
 		<hr>
@@ -402,7 +412,7 @@ $('#modalnuevo').click(function() {
             </form>
          </div>
          <div class="modal-body bg-info">
-            <form action="index.php?page=nueva_venta&amp;tipo=pedido" method="post" class="form-horizontal">
+            <form action="index.php?page=contabilidad_ingreso&amp;tipo=nuevocliente" method="post" class="form-horizontal">
                <input type="hidden" name="cliente">
                <div class="form-group">
                   <label class="col-sm-2 control-label">Nombre</label>
@@ -447,6 +457,7 @@ $('#modalnuevo').click(function() {
 {/if}
 <script>
 	$('#t_ingreso').change(function() {
+	$('.button').prop('disabled', false);
 	if ($(this).val()=='D') {
 		$('.tingresop').hide();
 		$('.tingresor').hide();

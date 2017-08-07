@@ -62,7 +62,9 @@ class ingreso extends fs_model
    {
       if( $this->exists() )
       {
-         $sql = "UPDATE ".$this->table_name." SET (descripcion = ".$this->descripcion.", referencia=".$this->referencia.")  WHERE codingreso = ".$this->var2str($this->codingreso).";";
+         $sql = "UPDATE ".$this->table_name." SET (fecha = ".$this->fecha.", descripcion = ".$this->descripcion.", tipopago=".$this->tipopago.", referencia=".$this->referencia.")  WHERE codingreso = ".$this->var2str($this->codingreso).";";
+         
+         $this->new_message("UPDATE ".$this->table_name." SET (fecha = ".$this->fecha.", descripcion = ".$this->descripcion.", tipopago=".$this->tipopago.", referencia=".$this->referencia.")  WHERE codingreso = ".$this->var2str($this->codingreso).";");
       }
       else
       {
