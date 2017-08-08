@@ -18,14 +18,43 @@ class ingreso extends fs_model
       parent::__construct('ingreso'); /// aquí indicamos el NOMBRE DE LA TABLA
       if($set_datos)
       {
-         $this->codcliente= $set_datos['codcliente'];
-         $this->nombrecliente= $set_datos['nombrecliente']; 
-         $this->fecha= Date('d-m-Y', strtotime($set_datos['fecha'])); 
-         $this->tipoingreso= $set_datos['tipoingreso'];  
-         $this->descripcion= $set_datos['descripcion']; 
-         $this->tipopago= $set_datos['tipopago'];
-         $this->referencia= $set_datos['referencia'];  
-         $this->total= $set_datos['total'];   
+         if(isset($set_datos['codingreso'])){
+             $this->codingreso=$set_datos['codingreso'] ;
+         }
+         if (isset($set_datos['codcliente'])) {
+           $this->codcliente= $set_datos['codcliente'];
+         }
+         if (isset($set_datos['nombrecliente'])) {
+            $this->nombrecliente= $set_datos['nombrecliente']; 
+         }
+         if (isset($set_datos['nombrecliente'])) {
+           $this->nombrecliente= $set_datos['nombrecliente'];
+         }
+         if (isset($set_datos['nombrecliente'])) {
+            $this->nombrecliente= $set_datos['nombrecliente']; 
+         }
+         if (isset($set_datos['nombrecliente'])) {
+            $this->nombrecliente= $set_datos['nombrecliente']; 
+         }
+         if (isset($set_datos['fecha'])) {
+            $this->fecha= Date('d-m-Y', strtotime($set_datos['fecha'])); 
+         }
+         if (isset($set_datos['tipoingreso'])) {
+            $this->tipoingreso= $set_datos['tipoingreso'];
+         }
+         if (isset($set_datos['descripcion'])) {
+            $this->descripcion= $set_datos['descripcion']; 
+         }
+         if (isset($set_datos['tipopago'])) {
+            $this->tipopago= $set_datos['tipopago'];
+         }
+         if (isset($set_datos['referencia'])) {
+            $this->referencia= $set_datos['referencia'];  
+         }
+         if (isset($set_datos['total'] )) {
+           $this->total= $set_datos['total'];
+         }        
+           
       }
       else
       {  
@@ -62,9 +91,8 @@ class ingreso extends fs_model
    {
       if( $this->exists() )
       {
-         $sql = "UPDATE ".$this->table_name." SET (fecha = ".$this->fecha.", descripcion = ".$this->descripcion.", tipopago=".$this->tipopago.", referencia=".$this->referencia.")  WHERE codingreso = ".$this->var2str($this->codingreso).";";
+         $sql = "UPDATE ".$this->table_name." SET fecha = ".$this->var2str($this->fecha).", descripcion = ".$this->var2str($this->descripcion).", tipopago=".$this->var2str($this->tipopago).", referencia=".$this->var2str($this->referencia)."  WHERE codingreso = ".$this->var2str($this->codingreso).";";
          
-         $this->new_message("UPDATE ".$this->table_name." SET (fecha = ".$this->fecha.", descripcion = ".$this->descripcion.", tipopago=".$this->tipopago.", referencia=".$this->referencia.")  WHERE codingreso = ".$this->var2str($this->codingreso).";");
       }
       else
       {

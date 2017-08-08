@@ -124,8 +124,10 @@ class contabilidad_ingreso extends fs_controller
 		 	elseif ($_GET['tipo']=='crear_ingreso') {	
 		 		$this->crear_ingreso();
 		 	}elseif ($_GET['tipo']=='editar_ingreso') {
-		 		$this->new_message('AQUI ESTOY');
-		 	}elseif ($this->status_nueclie<>'') {
+		 		$this->editar_ingreso();
+		 	}elseif (isset($_POST['delete'])) {
+                $this->eliminar_ingreso();
+            } elseif ($this->status_nueclie<>'') {
                 $this->nuevo_ingreso();
             }
 		 }
@@ -169,13 +171,31 @@ class contabilidad_ingreso extends fs_controller
 
     	$ing= new ingreso($get_datos);
 
-    	$aux=$ing->save();
+
+
+    	if ($aux=$ing->save()) {
+            $this->new_message('Ingreso creado con exito');
+
+            foreach ($_POST['checpedido'] as $value) {
+               $this->new_error_msg($value);
+            }
+            
+
+
+        }else{
+            $this->new_error_msg('Error al crear el ingreso');
+
+        }
+
+
+
+        //header("Location: index.php?page=contabilidad_ingreso");
     }
 
     public function editar_ingreso(){
 
         $get_datos = array(
-                      'codcliente'    => $_POST['codcliente'],
+                      'codingreso'    => $_POST['codingreso'],
                       'fecha'         => $_POST['fecha'],
                       'descripcion'   => $_POST['descripcion'],
                       'tipopago'      => $_POST['t_pago'],
@@ -183,7 +203,26 @@ class contabilidad_ingreso extends fs_controller
 
         $ing= new ingreso($get_datos);
 
-        $aux=$ing->save();
+        if ($aux=$ing->save()) {
+            $this->new_message('Ingreso editado con exito');
+        }else{
+            $this->new_error_msg('Error al editar el ingreso');
+        }
+        header("Location: index.php?page=contabilidad_ingreso");
+    }
+
+    public function eliminar_ingreso(){
+
+        $get_datos = array('codingreso'    => $_POST['delete']);
+
+        $ing= new ingreso($get_datos);
+
+         if ($aux=$ing->delete()) {
+            $this->new_message('Ingreso eliminado con exito');
+        }else{
+            $this->new_error_msg('Error al eliminar el ingreso');
+        }
+        header("Location: index.php?page=contabilidad_ingreso");
     }
 
     public function consulta_id(){
