@@ -119,5 +119,33 @@ class ingreso extends fs_model
    public function all(){
       return $this->db->select("SELECT * FROM ".$this->table_name." ORDER BY fecha desc");
    }
+
+   public function search($query, $offset = 0)
+   {
+        $query = mb_strtolower($this->no_html($query), 'UTF8');
+
+        $consulta = "SELECT concat_ws(' - ',codsubcuenta,descripcion) as subcuenta FROM " . $this->table_name . " WHERE  co_subcuentas where concat_ws(' - ',codsubcuenta,descripcion) like '%".$query."%' ";
+
+        $data = $this->db->select_limit($consulta, FS_ITEM_LIMIT, $offset);
+        return $this->all_from_data($data);
+   }
+
+    protected function buscar_subcuenta($query) {
+        /// desactivamos la plantilla HTML
+        $this->template = FALSE;
+
+        $json = array();
+        foreach ($cli->search($query) as $cli) {
+            $nombre = $cli->nombre;
+            if ($cli->nombre != $cli->razonsocial) {
+                $nombre .= ' (' . $cli->razonsocial . ')';
+            }
+
+            $json[] = array('value' => $cli->nombre, 'data' => $cli->codcliente, 'full' => $cli);
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(array('query' => $query, 'suggestions' => $json));
+    }
 }
 ?>

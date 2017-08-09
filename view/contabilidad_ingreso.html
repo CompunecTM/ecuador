@@ -1,5 +1,14 @@
 {include="header"}
-
+<style>
+	.bodyingresod{
+	    border: none;
+	    background-color: transparent;
+	    outline: none;
+	    box-shadow: none;
+	    width: 100%;
+	}
+    
+</style>
 <!-- ==========  SECCION LISTAR INGRESO ========== -->
 {if="$fsc->listar=='si'"}
 
@@ -101,7 +110,7 @@
 	  {/loop}
    </tbody></table>
 </div>
-<!-- ==========  SECCION LISTAR INGRESO :  END========== -->  
+<!-- ==========  SECCION LISTAR INGRESO :  END  ========== -->  
 {else}
 <!-- ==========  SECCION NUEVO INGRESO ========== -->
 <div class="container">
@@ -167,7 +176,42 @@
 		<h3>Ingreso directo</h3>
 		<hr>
 		<div class="row">
-			
+			<div class="table-responsive">
+			  <table class="table tablesubcuenta">
+			   		<thead style="background:#337AB7;color:#ffffff;font-weight: bold;font-size: 13px;">
+			   			<td style="width:55%;">Cuentas contable</td>
+			   			<td style="width:20%;">Debe</td>
+			   			<td style="width:20%;">Haber</td>
+			   			<td style="width:5%;text-align: center;">
+			   				<button type="button" class="fa fa-plus agresubcuenta" style="background: none;border: none;"></button>
+			   			</td>
+			   		</thead>
+			   		<tbody style="border-bottom: 1px solid #CCCCCC" class="bodysubcuenta">
+			   			<td>
+			   				<input type="text" class="bodyingresod autocuenta" name="cuenta[]" class="form-control"  value="" autocomplete="off">
+			   				<input type="hidden" name="ipsubcuenta[]" value="">
+			   			</td>
+			   			<td>
+			   				<input type="text" class="bodyingresod" name="debe[]" class="form-control" style=" text-align: right;" value="0.00" autocomplete="off">
+			   			</td>
+			   			<td>
+			   				<input type="text" class="bodyingresod" name="haber[]" class="form-control" style="text-align: right;" value="0.00" autocomplete="off">
+			   			</td>
+			   			<td>
+			   				<a type="button" href="#">
+           						<span style="color:#f04124;border-color:#ea2f10; " class="glyphicon glyphicon-remove elisubcuenta"></span>
+        					</a>
+        				</td>
+			   		</tbody>
+			  </table>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3 col-md-offset-9"><hr></div>
+			<div class="col-md-3 col-md-offset-9">				
+				<label for="">Total $</label><div class="totalingd" data-monto='0'><h3>0</h3></div>
+				<input type="hidden" name="totaltotalingd" value="0" />
+			</div>
 		</div>
 	</div>
 
@@ -318,7 +362,7 @@
 						<td class="text-left" >{$value['nombrecliente']}</td>
 						<td></td>
 						<td style="min-width:40%;">{$value['observaciones']}</td>
-						<td class="text-right"><input data-max="{$value['total']}"  name="monto" class="text-right monto" id="{$value['codigo']}" value="{$value['total']}" disabled="none" ></td>
+						<td class="text-right"><input data-max="{$value['total']}" data-pedido="{$value['codigo']}" name="monto" class="text-right monto" id="{$value['codigo']}" value="{$value['total']}" disabled="none" ></td>
 						<td class="text-center">{$value['fecha']}</td>
 						<td class="text-center"><input type="checkbox" data-ide="{$value['codigo']}"/></td>
 					</tr>
@@ -480,10 +524,41 @@ $('#modalnuevo').click(function() {
 {/if}
 <script>
 
-   function editaraction(){
-   	 $( 'form' ).submit();
-   	 alert('hola');
-   }
+	$(document).ready(function() {
+
+		$(".autocuenta").autocomplete({
+	        serviceUrl: 'index.php?page=contabilidad_ingreso',
+	        paramName: 'subcuenta',
+      	});
+
+      	$(".elisubcuenta").click(function() {
+      		alert('AQUI ESTOY');
+      		$('.bodysubcuenta ').children().first().remove();
+      	});
+
+      	$(".agresubcuenta").click(function() {
+      		$('.tablesubcuenta').append(
+      		'<tbody style="border-bottom: 1px solid #CCCCCC" class="bodysubcuenta">'+
+			'	<td>'+
+			'   	<input type="text" class="bodyingresod autocuenta" name="cuenta[]" class="form-control"  value="" autocomplete="off">'+
+			'   	<input type="hidden" name="ipsubcuenta[]" value="">'+
+			'   </td>'+
+			'   <td>'+
+			'   	<input type="text" class="bodyingresod" name="debe[]" class="form-control" style=" text-align: right;" value="0.00" autocomplete="off">'+
+			'  	</td>'+
+			'   <td>'+
+			'   	<input type="text" class="bodyingresod" name="haber[]" class="form-control" style="text-align: right;" value="0.00" autocomplete="off">'+
+			'   </td>'+
+			'   <td>'+
+			'   	<a type="button" href="#" class="elisubcuenta">'+
+           	'			<span style="color:#f04124;border-color:#ea2f10;" class="glyphicon glyphicon-remove"></span>'+
+        	'		</a>'+
+        	'	</td>'+
+			'</tbody>'
+      		);
+      	});
+
+	});	
 
 	$('#t_ingreso').change(function() {
 	$('.button').prop('disabled', false);
@@ -518,7 +593,7 @@ $('#modalnuevo').click(function() {
 				}
 			);
 
-			$('.pedido'+$(this).val()).append('<input value="'+parseInt($('#'+$(this).data('ide')).val())+'-'+$(this).val()+'" class="aux'+$(this).val()+'">');
+			$('.pedido'+$(this).val()).append('<input type="hidden" value="'+parseInt($('#'+$(this).data('ide')).val())+'-'+$(this).val()+'" class="aux'+$(this).val()+'">');
 			
 		    total = total + parseInt($('#'+$(this).data('ide')).val());
 		    $('.total').data('monto',total);
@@ -554,7 +629,8 @@ $('#modalnuevo').click(function() {
 							importe_total = importe_total + parseInt($(this).val());
 						}
 					}
-				); 
+				);
+			$('.aux'+$(this).attr('id')).attr('value',$(this).data('max')+"-"+$(this).attr('id'));
 			$('input[name="total"]').attr('value',importe_total);
 			$('.total').data('monto',importe_total);
 			$('.total').append('<h3>'+importe_total+'</h3>');
@@ -569,6 +645,7 @@ $('#modalnuevo').click(function() {
 						}
 					}
 				); 
+			$('.aux'+$(this).attr('id')).attr('value',$(this).val()+"-"+$(this).attr('id'));
 			$('input[name="total"]').attr('value',importe_total);
 			$('.total').data('monto',importe_total);
 			$('.total').append('<h3>'+importe_total+'</h3>');

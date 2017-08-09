@@ -5,8 +5,8 @@
 
 require_once 'plugins/facturacion_base/extras/fbase_controller.php';
 require_model('forma_pago.php');
-
 require_model('ingreso.php');
+require_model('subcuenta.php');
 
 class contabilidad_ingreso extends fs_controller
 {
@@ -119,7 +119,7 @@ class contabilidad_ingreso extends fs_controller
 			$this->consulta_id();
 		}
 
-		 if (isset($_GET['tipo'])) {
+		if (isset($_GET['tipo'])) {
 		 	if ($_GET['tipo']=='ingreso'){$this->nuevo_ingreso();}
 		 	elseif ($_GET['tipo']=='crear_ingreso') {	
 		 		$this->crear_ingreso();
@@ -129,8 +129,12 @@ class contabilidad_ingreso extends fs_controller
                 $this->eliminar_ingreso();
             } elseif ($this->status_nueclie<>'') {
                 $this->nuevo_ingreso();
-            }
-		 }
+            } 
+		}
+
+        if (isset($_GET['subcuenta'])) {
+            $this->buscar_subcuenta($_GET['subcuenta']);
+        }
     }
 
 	public function listar_pedido() {  
@@ -232,6 +236,27 @@ class contabilidad_ingreso extends fs_controller
     	return $row;
     }
 
+      private function buscar_subcuenta($aux)
+    {
+        /// desactivamos la plantilla HTML
+        $this->template = FALSE;
+
+        $subcuenta = new subcuenta();
+        $eje0 = new ejercicio();
+        $ejercicio = $eje0->get_by_fecha($this->today());
+        $json = array();
+        foreach ($subcuenta->search_by_ejercicio($ejercicio->codejercicio, $aux) as $subc) {
+            $json[] = array(
+                'value' => $subc->codsubcuenta.' - '.$subc->descripcion,
+                'data' => $subc->codsubcuenta,
+                'saldo' => $subc->saldo,
+                'link' => $subc->url()
+            );
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(array('query' => $aux, 'suggestions' => $json));
+    }
   
 }
 
