@@ -11,7 +11,7 @@ class ingreso extends fs_model
    private $descripcion; 
    private $tipopago;  
    private $referencia;   
-   private $total;   
+   private $total;
 
    public function __construct($set_datos = FALSE)
    {

@@ -128,7 +128,7 @@
 	<form name="f_nuevo_ingreso" action="index.php?page=contabilidad_ingreso&amp;tipo=crear_ingreso" method="post" class="form">
 	<div class="form-group ">
 		<div class="row ">
-
+			<input type="hidden" name="petition_id" value="{$fsc->random_string()}"/>
 			<input type="hidden" placeholder="Numero de Ingreso" name="numero_i" id="numero_i" class="form-control">	
 			<div class="col-sm-7 ">
 				<label for="cliente">Cliente</label>
@@ -183,34 +183,26 @@
 			   			<td style="width:20%;">Debe</td>
 			   			<td style="width:20%;">Haber</td>
 			   			<td style="width:5%;text-align: center;">
-			   				<button type="button" class="fa fa-plus agresubcuenta" style="background: none;border: none;"></button>
+			   				<button type="button" class="fa fa-plus agresubcuenta" style="background: none;border: none;""></button>
 			   			</td>
 			   		</thead>
 			   		<tbody style="border-bottom: 1px solid #CCCCCC" class="bodysubcuenta">
 			   			<td>
-			   				<input type="text" class="bodyingresod autocuenta" name="cuenta[]" class="form-control"  value="" autocomplete="off">
-			   				<input type="hidden" name="ipsubcuenta[]" value="">
+			   				<input type="text" class="form-control bodyingresod autocuenta" name="cuenta[]" value="" autocomplete="off">
+			   			</td> 
+			   			<td>
+			   				<input type="text" class="bodyingresod form-control debe" name="debe[]" style=" text-align: right;" value="0.00" autocomplete="off">
 			   			</td>
 			   			<td>
-			   				<input type="text" class="bodyingresod" name="debe[]" class="form-control" style=" text-align: right;" value="0.00" autocomplete="off">
+			   				<input type="text" class="bodyingresod form-control haber" name="haber[]" style="text-align: right;" value="0.00" autocomplete="off">
 			   			</td>
 			   			<td>
-			   				<input type="text" class="bodyingresod" name="haber[]" class="form-control" style="text-align: right;" value="0.00" autocomplete="off">
-			   			</td>
-			   			<td>
-			   				<a type="button" href="#">
-           						<span style="color:#f04124;border-color:#ea2f10; " class="glyphicon glyphicon-remove elisubcuenta"></span>
+			   				<a type="button" onclick="eliminarsubcuenta();">
+           						<span style="color:#f04124;border-color:#ea2f10;margin-top:30%;" class="glyphicon glyphicon-remove"></span>
         					</a>
         				</td>
 			   		</tbody>
 			  </table>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-3 col-md-offset-9"><hr></div>
-			<div class="col-md-3 col-md-offset-9">				
-				<label for="">Total $</label><div class="totalingd" data-monto='0'><h3>0</h3></div>
-				<input type="hidden" name="totaltotalingd" value="0" />
 			</div>
 		</div>
 	</div>
@@ -252,14 +244,6 @@
 		     </tbody>
 		  	</table>
 		</div>
-		<div class="row">
-			<div class="col-md-3 col-md-offset-9"><hr></div>
-			<div class="col-md-3 col-md-offset-9">				
-				<label for="">Total $</label><div class="total" data-monto='0'><h3>0</h3></div>
-				<input type="hidden" name="total" value="0" />
-			</div>
-		</div>
-		<br>
 {/if}
 </div>
 	<div class="form-group tingresor" style="display: none">
@@ -269,6 +253,14 @@
 			
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-md-3 col-md-offset-9"><hr></div>
+		<div class="col-md-3 col-md-offset-9">				
+			<label for="">Total $</label><div class="total" data-monto='0'><h3>0</h3></div>
+			<input type="hidden" name="total" value="0" />
+		</div>
+	</div>
+	<br>
 	<div class="row text-right">
 		<button class="btn btn-sm btn-primary button" type="button" onclick="this.disabled = true;this.form.submit();" disabled >
            <span class="glyphicon glyphicon-floppy-disk"></span>&nbsp; Guardar...
@@ -524,41 +516,128 @@ $('#modalnuevo').click(function() {
 {/if}
 <script>
 
-	$(document).ready(function() {
-
-		$(".autocuenta").autocomplete({
-	        serviceUrl: 'index.php?page=contabilidad_ingreso',
-	        paramName: 'subcuenta',
-      	});
-
-      	$(".elisubcuenta").click(function() {
-      		alert('AQUI ESTOY');
-      		$('.bodysubcuenta ').children().first().remove();
-      	});
-
-      	$(".agresubcuenta").click(function() {
-      		$('.tablesubcuenta').append(
+	$(".agresubcuenta").click(function() {
+      	$('.tablesubcuenta').append(
       		'<tbody style="border-bottom: 1px solid #CCCCCC" class="bodysubcuenta">'+
 			'	<td>'+
-			'   	<input type="text" class="bodyingresod autocuenta" name="cuenta[]" class="form-control"  value="" autocomplete="off">'+
+			'   	<input type="text" class="bodyingresod autocuenta form-control" name="cuenta[]" value="" autocomplete="off">'+
 			'   	<input type="hidden" name="ipsubcuenta[]" value="">'+
 			'   </td>'+
 			'   <td>'+
-			'   	<input type="text" class="bodyingresod" name="debe[]" class="form-control" style=" text-align: right;" value="0.00" autocomplete="off">'+
+			'   	<input type="text" class="bodyingresod form-control debe" name="debe[]" style=" text-align: right;" value="0.00" autocomplete="off">'+
 			'  	</td>'+
 			'   <td>'+
-			'   	<input type="text" class="bodyingresod" name="haber[]" class="form-control" style="text-align: right;" value="0.00" autocomplete="off">'+
+			'   	<input type="text" class="bodyingresod form-control haber" name="haber[]" style="text-align: right;" value="0.00" autocomplete="off">'+
 			'   </td>'+
 			'   <td>'+
-			'   	<a type="button" href="#" class="elisubcuenta">'+
-           	'			<span style="color:#f04124;border-color:#ea2f10;" class="glyphicon glyphicon-remove"></span>'+
+			'   	<a type="button" onclick="eliminarsubcuenta();">'+
+           	'			<span style="color:#f04124;border-color:#ea2f10;margin-top:30%;" class="glyphicon glyphicon-remove"></span>'+
         	'		</a>'+
         	'	</td>'+
 			'</tbody>'
-      		);
-      	});
+      	);
 
-	});	
+	$("input[name='cuenta[]']").each(function () {
+		$(this).autocomplete({
+	        serviceUrl: 'index.php?page=contabilidad_ingreso',
+	        paramName: 'subcuenta',
+		});
+
+	});
+
+	$(".debe").keyup(function() {
+		debe = 0;
+		haber = 0;
+		importe_total = 0;
+		$('.total').empty();
+		$(".debe").each(
+			function(index, value) {					
+				debe = debe - parseInt($(this).val());
+			}
+		); 
+		$(".haber").each(
+			function(index, value) {					
+				haber = haber + parseInt($(this).val());
+			}
+		); 
+		importe_total= debe + haber;
+		$('input[name="total"]').attr('value',importe_total);
+		$('.total').data('monto',importe_total);
+		$('.total').append('<h3>'+importe_total+'</h3>');
+	});
+
+	$(".haber").keyup(function() {
+		debe = 0;
+		haber = 0;
+		importe_total = 0;
+		$('.total').empty();
+		$(".debe").each(
+			function(index, value) {					
+				debe = debe - parseInt($(this).val());
+			}
+		); 
+		$(".haber").each(
+			function(index, value) {					
+				haber = haber + parseInt($(this).val());
+			}
+		); 
+		importe_total= debe + haber;
+		$('input[name="total"]').attr('value',importe_total);
+		$('.total').data('monto',importe_total);
+		$('.total').append('<h3>'+importe_total+'</h3>');
+	});
+
+    });
+
+	$("input[name='cuenta[]']").each(function () {
+    	$(this).autocomplete({
+	        serviceUrl: 'index.php?page=contabilidad_ingreso',
+	        paramName: 'subcuenta',
+  		});
+
+	});
+
+	$(".debe").keyup(function() {
+		debe = 0;
+		haber = 0;
+		importe_total = 0;
+		$('.total').empty();
+		$(".debe").each(
+			function(index, value) {					
+				debe = debe - parseInt($(this).val());
+			}
+		); 
+		$(".haber").each(
+			function(index, value) {					
+				haber = haber + parseInt($(this).val());
+			}
+		); 
+		importe_total= debe + haber;
+		$('input[name="total"]').attr('value',importe_total);
+		$('.total').data('monto',importe_total);
+		$('.total').append('<h3>'+importe_total+'</h3>');
+	});
+
+	$(".haber").keyup(function() {
+		debe = 0;
+		haber = 0;
+		importe_total = 0;
+		$('.total').empty();
+		$(".debe").each(
+			function(index, value) {					
+				debe = debe - parseInt($(this).val());
+			}
+		); 
+		$(".haber").each(
+			function(index, value) {					
+				haber = haber + parseInt($(this).val());
+			}
+		); 
+		importe_total= debe + haber;
+		$('input[name="total"]').attr('value',importe_total);
+		$('.total').data('monto',importe_total);
+		$('.total').append('<h3>'+importe_total+'</h3>');
+	});
 
 	$('#t_ingreso').change(function() {
 	$('.button').prop('disabled', false);
@@ -656,5 +735,9 @@ $('#modalnuevo').click(function() {
          event.preventDefault();
          $('#modal_eliminar').modal('show');
     });
+
+    function eliminarsubcuenta() {
+      	$('.bodysubcuenta ').children().first().remove();
+    };
 </script>
 {include="footer"}

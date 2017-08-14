@@ -6,7 +6,12 @@
 require_once 'plugins/facturacion_base/extras/fbase_controller.php';
 require_model('forma_pago.php');
 require_model('ingreso.php');
+require_model('ingreso_detalle.php');
 require_model('subcuenta.php');
+require_model('asiento');
+require_model('ejercicio.php');
+require_model('divisa.php');
+
 
 class contabilidad_ingreso extends fs_controller
 {
@@ -16,6 +21,11 @@ class contabilidad_ingreso extends fs_controller
     public $id;
     public $tipopago;
     public $status_nueclie;
+    public $asiento;
+    public $ejercicio;
+    public $divisa;
+    public $importe;
+    public $numlineas;
 
 	function __construct()
 	{
@@ -31,6 +41,16 @@ class contabilidad_ingreso extends fs_controller
 		$this->ingreso = new ingreso();
 
         $this->cliente = new cliente();
+
+        $this->asiento = new asiento();
+
+        $this->ejercicio = new ejercicio();
+
+        $this->divisa = new divisa();
+
+        $this->importe = 0;
+
+        $this->numlineas = 0;
 
          /**
          * Nuevo cliente
@@ -175,16 +195,68 @@ class contabilidad_ingreso extends fs_controller
 
     	$ing= new ingreso($get_datos);
 
-
-
     	if ($aux=$ing->save()) {
-            $this->new_message('Ingreso creado con exito');
+            //$this->new_message('Ingreso creado con exito');
 
-            foreach ($_POST['checpedido'] as $value) {
-               $this->new_error_msg($value);
-            }
-            
+            if($_POST['t_ingreso']=='D'){
 
+                $cuenta = $_POST['cuenta'];
+                $debe = $_POST['debe'];
+                $haber = $_POST['haber'];
+
+
+                $id=$this->db->select("SELECT max(codingreso) as codingreso,tipopago FROM ingreso GROUP BY tipopago;");
+                
+
+                $this->numlineas=count($cuenta);
+
+                for ($i=0; $i < count($cuenta) ; $i++) { 
+
+                    $monto = 0;
+                    $tipo_ingresod= '';
+
+                    if ($debe[$i]>0) {
+                        $monto=$debe[$i];
+                        $tipo_ingresod='D';
+                    }else{
+                        $monto=$haber[$i];
+                        $tipo_ingresod='H';
+                        $this->importe=$this->importe+$haber[$i];
+                    }
+
+                    $get_detalle = array(
+
+                        'tipopago'      => $id[0]['tipopago'],
+                        'monto'         => $monto,
+                        'referencia'    => substr($cuenta[$i],'0','7'),
+                        'tipo_ingresod' => $tipo_ingresod,
+                        'codingreso'    => $id[0]['codingreso']
+
+                    );
+
+                    $detalle = new ingreso_detalle($get_detalle);
+
+                    if ($aux=$detalle->save()) {
+                        $this->new_message('Exito al crear el detalle del ingreso');
+                        
+                    }else{
+                        $this->new_message('Error al crear el detalle del ingreso');
+                    }
+                }
+
+                $this->nuevo_asiento();            
+
+            } elseif ($_POST['t_ingreso']=='P') {
+
+                foreach ($_POST['checpedido'] as $value) {
+                   $this->new_error_msg($value);
+                }
+
+            } elseif ($_POST['t_ingreso']=='R') {
+               
+
+
+            }       
 
         }else{
             $this->new_error_msg('Error al crear el ingreso');
@@ -194,6 +266,127 @@ class contabilidad_ingreso extends fs_controller
 
 
         //header("Location: index.php?page=contabilidad_ingreso");
+    }
+
+    private function nuevo_asiento()
+    {
+        $continuar = TRUE;
+
+        $eje0 = $this->get_ejercicio($_POST['fecha']);
+        if (!$eje0) {
+            $continuar = FALSE;
+        }
+
+        $div0 = $this->divisa->get('USD');
+        if (!$div0) {
+            $this->new_error_msg('Divisa no encontrada.');
+            $continuar = FALSE;
+        }
+
+        if ($this->duplicated_petition($_POST['petition_id'])) {
+            $this->new_error_msg('Petición duplicada. Has hecho doble clic sobre el botón Guardar
+               y se han enviado dos peticiones.');
+            $continuar = FALSE;
+        }
+
+        if ($continuar) {
+            $this->asiento->codejercicio = $eje0->codejercicio;
+            $this->asiento->idconcepto = NULL;
+            $this->asiento->concepto = 'Ingreso';
+            $this->asiento->fecha = $_POST['fecha'];
+            $this->asiento->importe = $this->importe;
+
+            $cuenta = $_POST['cuenta'];
+            $debe = $_POST['debe'];
+            $haber = $_POST['haber'];
+
+            if ($this->asiento->save()) {
+                $this->new_message('AQUI ESTOY');
+                for ($i = 1; $i <=  $this->numlineas; $i++) {
+                    if (isset($cuenta)) {
+                        if ($cuenta != '' AND $continuar) {
+                            $sub0 = $this->subcuenta->get_by_codigo($cuenta, $eje0->codejercicio);
+                            if ($sub0) {
+                                $partida = new partida();
+                                $partida->idasiento = $this->asiento->idasiento;
+                                $partida->coddivisa = $div0->coddivisa;
+                                $partida->tasaconv = $div0->tasaconv;
+                                $partida->idsubcuenta = $sub0->idsubcuenta;
+                                $partida->codsubcuenta = $sub0->codsubcuenta;
+                                $partida->debe = floatval($_POST['debe_' . $i]);
+                                $partida->haber = floatval($_POST['haber_' . $i]);
+                                $partida->idconcepto = $this->asiento->idconcepto;
+                                $partida->concepto = $this->asiento->concepto;
+                                $partida->documento = $this->asiento->documento;
+                                $partida->tipodocumento = $this->asiento->tipodocumento;
+
+                                if (isset($_POST['codcontrapartida_' . $i])) {
+                                    if ($_POST['codcontrapartida_' . $i] != '') {
+                                        $subc1 = $this->subcuenta->get_by_codigo($_POST['codcontrapartida_' . $i], $eje0->codejercicio);
+                                        if ($subc1) {
+                                            $partida->idcontrapartida = $subc1->idsubcuenta;
+                                            $partida->codcontrapartida = $subc1->codsubcuenta;
+                                            $partida->cifnif = $_POST['cifnif_' . $i];
+                                            $partida->iva = floatval($_POST['iva_' . $i]);
+                                            $partida->baseimponible = floatval($_POST['baseimp_' . $i]);
+                                        } else {
+                                            $this->new_error_msg('Subcuenta ' . $_POST['codcontrapartida_' . $i] . ' no encontrada.');
+                                            $continuar = FALSE;
+                                        }
+                                    }
+                                }
+
+                                if (!$partida->save()) {
+                                    $this->new_error_msg('Imposible guardar la partida de la subcuenta ' . $_POST['codsubcuenta_' . $i] . '.');
+                                    $continuar = FALSE;
+                                }
+                            } else {
+                                $this->new_error_msg('Subcuenta ' . $_POST['codsubcuenta_' . $i] . ' no encontrada.');
+                                $continuar = FALSE;
+                            }
+                        }
+                    }
+                }
+
+                if ($continuar) {
+                    $this->asiento->concepto = '';
+
+                    $this->new_message("<a href='" . $this->asiento->url() . "'>Asiento</a> guardado correctamente!");
+                    $this->new_change('Asiento ' . $this->asiento->numero, $this->asiento->url(), TRUE);
+
+                    if ($_POST['redir'] == 'TRUE') {
+                        header('Location: ' . $this->asiento->url());
+                    }
+                } else {
+                    if ($this->asiento->delete()) {
+                        $this->new_error_msg("¡Error en alguna de las partidas! Se ha borrado el asiento.");
+                    } else
+                        $this->new_error_msg("¡Error en alguna de las partidas! Además ha sido imposible borrar el asiento.");
+                }
+            }
+            else {
+                $this->new_error_msg("¡Imposible guardar el asiento!");
+            }
+        }
+    }
+
+    private function get_ejercicio($fecha)
+    {
+        $ejercicio = FALSE;
+
+        $ejercicio = $this->ejercicio->get_by_fecha($fecha);
+        if ($ejercicio) {
+            $regiva0 = new regularizacion_iva();
+            if ($regiva0->get_fecha_inside($fecha)) {
+                $this->new_error_msg('No se puede usar la fecha ' . $_POST['fecha'] . ' porque ya hay'
+                    . ' una regularización de ' . FS_IVA . ' para ese periodo.');
+                $ejercicio = FALSE;
+            }
+        } else {
+            $this->new_error_msg('Ejercicio no encontrado.');
+        }
+
+        return $ejercicio;
     }
 
     public function editar_ingreso(){
@@ -236,7 +429,7 @@ class contabilidad_ingreso extends fs_controller
     	return $row;
     }
 
-      private function buscar_subcuenta($aux)
+    private function buscar_subcuenta($aux)
     {
         /// desactivamos la plantilla HTML
         $this->template = FALSE;
