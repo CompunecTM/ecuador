@@ -46,16 +46,43 @@ class validacioncedruc extends fs_controller
             $data['tipoval'] = 'CPE';
          } elseif ($validador->validarRucPersonaNatural($cedruc)) {
             // validar RUC persona natural
+
+            $selclipro = $this->consultaclipro($cedruc,$_POST['validarprocli']);
+
+            if (count($selclipro) > 0) {
+               $data['selclipro'] = $selclipro[0]['nombre'];
+            }else{
+               $data['selclipro'] ='';
+            }
+
             $data['mensaje'] = 'RUC persona física válido';
             $data['estatus'] = '1';
             $data['tipoval'] = 'RPE';
          } elseif ($validador->validarRucSociedadPrivada($cedruc)) {
             // validar RUC sociedad Privada
+
+            $selclipro = $this->consultaclipro($cedruc,$_POST['validarprocli']);
+
+            if (count($selclipro) > 0) {
+               $data['selclipro'] = $selclipro[0]['nombre'];
+            }else{
+               $data['selclipro'] ='';
+            }
+
             $data['mensaje'] = 'RUC privado válido';
             $data['estatus'] = '1';
             $data['tipoval'] = 'RPI';
          } elseif ($validador->validarRucSociedadPublica($cedruc)) {
             // validar RUC sociedad publica
+
+            $selclipro = $this->consultaclipro($cedruc,$_POST['validarprocli']);
+
+            if (count($selclipro) > 0) {
+               $data['selclipro'] = $selclipro[0]['nombre'];
+            }else{
+               $data['selclipro'] ='';
+            }
+
             $data['mensaje'] = 'RUC publico válido';
             $data['estatus'] = '1';
             $data['tipoval'] = 'RPU';
