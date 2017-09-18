@@ -8,49 +8,59 @@ function validar(thisaux,campocedruc, camposeltipofiscal,validarprocli){
   .done(function(data) {
 
     if (data['selclipro'] == '') {
+
       $('input[name="'+campocedruc+'"]').parent('div').removeClass('has-success');
       $('input[name="'+campocedruc+'"]').parent('div').removeClass('has-error');
 
-      if (data['estatus'] == '1') {
-        $('input[name="'+campocedruc+'"]').parent('div').addClass('has-success');
-        $('button[type="submit"]').attr('disabled',false);
+      if (!data['pasaporte']) {
+
+        if (data['estatus'] == '1') {
+          $('input[name="'+campocedruc+'"]').parent('div').addClass('has-success');
+          $('button[type="submit"]').attr('disabled',false);
+        }else{
+          $('input[name="'+campocedruc+'"]').parent('div').addClass('has-error');
+          $('button[type="submit"]').attr('disabled',true);
+        }
+
+        $('input[name="'+campocedruc+'"]').attr('data-container', 'body');
+        $('input[name="'+campocedruc+'"]').attr('data-toggle', 'popover');
+        $('input[name="'+campocedruc+'"]').attr('data-placement', 'top');
+        
+        $('input[name="'+campocedruc+'"]').attr('data-content', data['mensaje']);
+
+        $('input[name="'+campocedruc+'"]').popover('show');
+
+        if (data['tipoval'] == 'CPE') {
+          $('select[name="'+camposeltipofiscal+'"]').val('Cedula');
+          $('input[name="personafisica"]').attr('checked',true);
+        }
+        if (data['tipoval'] == 'RPE') {
+          $('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
+          $('input[name="personafisica"]').attr('checked',true);
+        }
+        if (data['tipoval'] == 'RPI') {
+          $('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
+          $('input[name="personafisica"]').attr('checked',false);
+        }
+        if (data['tipoval'] == 'RPU') {
+          $('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
+          $('input[name="personafisica"]').attr('checked',false);
+        }
       }else{
-        $('input[name="'+campocedruc+'"]').parent('div').addClass('has-error');
-        $('button[type="submit"]').attr('disabled',true);
+        $('input[name="'+campocedruc+'"]').popover('destroy');
+        $('button[type="submit"]').attr('disabled',false);
       }
-
-      $('input[name="'+campocedruc+'"]').attr('data-container', 'body');
-      $('input[name="'+campocedruc+'"]').attr('data-toggle', 'popover');
-      $('input[name="'+campocedruc+'"]').attr('data-placement', 'top');
       
-      $('input[name="'+campocedruc+'"]').attr('data-content', data['mensaje']);
-
-      $('input[name="'+campocedruc+'"]').popover('show');
-
-      if (data['tipoval'] == 'CPE') {
-        $('select[name="'+camposeltipofiscal+'"]').val('Cedula');
-        $('input[name="personafisica"]').attr('checked',true);
-      }
-      if (data['tipoval'] == 'RPE') {
-        $('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
-        $('input[name="personafisica"]').attr('checked',true);
-      }
-      if (data['tipoval'] == 'RPI') {
-        $('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
-        $('input[name="personafisica"]').attr('checked',false);
-      }
-      if (data['tipoval'] == 'RPU') {
-        $('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
-        $('input[name="personafisica"]').attr('checked',false);
-      }
     }else{
 
       if ($('#ac_cliente').length || $('#ac_proveedor').length) {
         $('input[name="'+campocedruc+'"]').val('');
+        $('button[type="submit"]').attr('disabled',false);
         $('input[name="ac_cliente"').val(data['selclipro']);
         $('input[name="ac_cliente"').focus();
         $('input[name="ac_proveedor"').val(data['selclipro']);
         $('input[name="ac_proveedor"').focus();
+
       }else{
 
         $('input[name="'+campocedruc+'"]').attr('data-placement', 'top');
@@ -70,7 +80,8 @@ function validar(thisaux,campocedruc, camposeltipofiscal,validarprocli){
   .always(function() {
     setTimeout(function() {
         $('input[name="'+campocedruc+'"]').popover('hide');
-    }, 1500);
+        $('input[name="'+campocedruc+'"]').popover('destroy');
+    }, 3000);
   });
   
 }
@@ -101,7 +112,10 @@ function funvalidar(){
 
 	$("select[name='tipoidfiscal']").change(function() {
 		$("input[name='cifnif']").val("");
-	   	$("button[type='submit']").attr("disabled",true);
+    $('input[name="cifnif"]').parent('div').removeClass('has-success');
+    $('input[name="cifnif"]').parent('div').removeClass('has-error');
+    $('input[name="cifnif"]').popover('destroy');
+	  $("button[type='submit']").attr("disabled",true);
 	}); 
 
 	$("input[name='personafisica']").change(function() {
@@ -116,9 +130,12 @@ function funvalidar_nuevaventa(){
 		validar($(this).val(),'nuevo_cifnif','nuevo_tipoidfiscal',validarprocli()); 
 	}); 
 
-	$("select[name='tipoidfiscal']").change(function() {
-		$("input[name='cifnif']").val("");
-	   	$("button[type='submit']").attr("disabled",true);
+	$("select[name='nuevo_tipoidfiscal']").change(function() {
+		$("input[name='nuevo_cifnif']").val("");
+    $('input[name="nuevo_cifnif"]').parent('div').removeClass('has-success');
+    $('input[name="nuevo_cifnif"]').parent('div').removeClass('has-error');
+    $('input[name="nuevo_cifnif"]').popover('destroy');
+	  $("button[type='submit']").attr("disabled",true);
 	}); 
 
 	$("input[name='personafisica']").change(function() {
