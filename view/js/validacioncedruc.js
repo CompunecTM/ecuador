@@ -69,6 +69,10 @@ function funvalidar(){
 		$("input[name='cifnif']").val("");
 	   	$("button[type='submit']").attr("disabled",true);
 	}); 
+
+	$("input[name='personafisica']").change(function() {
+		$("input[name='cifnif']").val('');
+	});
 	
 }
 
@@ -82,6 +86,10 @@ function funvalidar_nuevaventa(){
 		$("input[name='cifnif']").val("");
 	   	$("button[type='submit']").attr("disabled",true);
 	}); 
+
+	$("input[name='personafisica']").change(function() {
+		$("input[name='nuevo_cifnif']").val('');
+	});
 	
 }
 
