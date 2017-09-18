@@ -29,8 +29,18 @@ class validacioncedruc extends fs_controller
             $perfisica = 'empresa';
          }
 
+         $data['selclipro'] ='';
+
          if ($validador->validarCedula($cedruc)) {
             // validar CI
+            $selclipro = $this->consultaclipro($cedruc,$_POST['validarprocli']);
+
+            if (count($selclipro) > 0) {
+               $data['selclipro'] = $selclipro[0]['nombre'];
+            }else{
+               $data['selclipro'] ='';
+            }   
+
             $data['mensaje'] = 'Cédula válida';
             $data['estatus'] = '1';
             $data['tipoval'] = 'CPE';
@@ -128,5 +138,9 @@ class validacioncedruc extends fs_controller
       $fsext7->text = $text;
       $fsext7->save();
    }
+
+   public function consultaclipro($cifnif,$selclipro){      
+   return  $this->db->select("SELECT nombre FROM ".$selclipro." WHERE cifnif = '".$cifnif."';");
+   } 
 
 }
