@@ -3,7 +3,7 @@ function validar(thisaux,campocedruc, camposeltipofiscal){
     url: 'index.php?page=validacioncedruc',
     type: 'POST',
     dataType: 'json',
-    data: {cedruc: thisaux, tipfiscal: $('select[name="'+camposeltipofiscal+'"]').val(), perfisica: $('input[name="personafisica"]').prop('checked'),pribpubli: $('input[name="privpubli"]').prop('checked') },
+    data: {cedruc: thisaux, tipfiscal: $('select[name="'+camposeltipofiscal+'"]').val(), perfisica: $('input[name="personafisica"]').prop('checked') },
   })
   .done(function(data) {
 
@@ -26,6 +26,26 @@ function validar(thisaux,campocedruc, camposeltipofiscal){
 
     $('input[name="'+campocedruc+'"]').popover('show');
 
+    console.log(data['tipoval']);
+
+    if (data['tipoval'] == 'CPE') {
+    	$('select[name="'+camposeltipofiscal+'"]').val('Cedula');
+    	$('input[name="personafisica"]').attr('checked',true);
+    }
+    if (data['tipoval'] == 'RPE') {
+    	$('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
+    	$('input[name="personafisica"]').attr('checked',true);
+    }
+    if (data['tipoval'] == 'RPI') {
+    	$('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
+    	$('input[name="personafisica"]').attr('checked',false);
+    }
+    if (data['tipoval'] == 'RPU') {
+    	$('select[name="'+camposeltipofiscal+'"]').val('R.U.C');
+    	$('input[name="personafisica"]').attr('checked',false);
+    }
+
+
 
   })
   .fail(function() {
@@ -34,7 +54,7 @@ function validar(thisaux,campocedruc, camposeltipofiscal){
   .always(function() {
     setTimeout(function() {
         $('input[name="'+campocedruc+'"]').popover('hide');
-    }, 1000);
+    }, 1500);
   });
   
 }
@@ -49,17 +69,6 @@ function funvalidar(){
 		$("input[name='cifnif']").val("");
 	   	$("button[type='submit']").attr("disabled",true);
 	}); 
-
-	auxscript='';
-
-	auxscript +='<label class="checkbox-inline" style="margin-left: 0;">'; 
-	auxscript +='<input type="checkbox" name="privpubli" value="TRUE" checked="" disabled="disabled">';
-	auxscript +='empresa privada (no publica)';
-	auxscript +='</label>';
-
-	$('input[name="cifnif"]').parent().append(auxscript);
-
-	validar_chkpersonafisica('cifnif', 'tipoidfiscal');
 	
 }
 
@@ -69,127 +78,18 @@ function funvalidar_nuevaventa(){
 		validar($(this).val(),'nuevo_cifnif','nuevo_tipoidfiscal'); 
 	}); 
 
-	$("select[name='nuevo_tipoidfiscal']").change(function() {
-		validar_chkpersonafisica('nuevo_cifnif', 'nuevo_tipoidfiscal');
+	$("select[name='tipoidfiscal']").change(function() {
+		$("input[name='cifnif']").val("");
+	   	$("button[type='submit']").attr("disabled",true);
 	}); 
-
-	auxscript='';
-
-	auxscript +='<label class="checkbox-inline" style="margin-left: 0;">'; 
-	auxscript +='<input type="checkbox" name="privpubli" value="TRUE" checked="" disabled="disabled">';
-	auxscript +='empresa privada (no publica)';
-	auxscript +='</label>';
-
-	$('input[name="nuevo_cifnif"]').parent().append(auxscript);
-
-	validar_chkpersonafisica('nuevo_cifnif', 'nuevo_tipoidfiscal');
 	
 }
 
-function validar_chkpersonafisica(campocedruc, camposeltipofiscal){
-	if(!$("input[name='personafisica']").prop("checked") ) {
-
-	  	$("button[type='submit']").attr("disabled",true);
-	  	$("input[name='privpubli']").attr("disabled",false);
-	  	$("select[name='"+camposeltipofiscal+"']").val("R.U.C");
-	  	$("select[name='"+camposeltipofiscal+"']").parent().append('<input type="hidden" name="aux" value="R.U.C">');
-	  	$("select[name='"+camposeltipofiscal+"']").attr("name",camposeltipofiscal+'_AUX');
-	  	$("input[name='aux']").attr("name",camposeltipofiscal);
-
-
-	  	$("select[name='"+camposeltipofiscal+"_AUX']").attr("disabled",true);
-
-
-		$("input[name='privpubli']").change(function() {
-			$("input[name='"+campocedruc+"']").val('');
-		  	$("button[type='submit']").attr("disabled",true);
-		}); 
-
-	}else{
-
-	  	$("button[type='submit']").attr("disabled",true);
-	  	$("input[name='privpubli']").attr("disabled",true);
-	  	$("input[name='"+camposeltipofiscal+"']").remove();
-	  	$("select[name='"+camposeltipofiscal+"_AUX']").attr('disabled',false);
-	  	$("select[name='"+camposeltipofiscal+"_AUX']").attr('name',camposeltipofiscal);
-	  	$("select[name='"+camposeltipofiscal+"']").val('Cedula');
-
-		$("input[name='privpubli']").change(function() {
-			$("input[name='"+campocedruc+"']").val('');
-		  	$("button[type='submit']").attr("disabled",true);
-		}); 
-	}
-}
-
-
-
 $(document).ready(function() {
-	var scriptaux ='';
-	var aux = '';
-	var aux2 = '';
 
 	funvalidar();
 
 	funvalidar_nuevaventa();
 
-	scriptaux ='';
-
-	aux2="'personafisica'";
-	scriptaux +='<script>';
-
-	scriptaux +='$("input[name='+aux2+']").change(function() {';
-	scriptaux +='	validar_chkpersonafisica("nuevo_cifnif", "nuevo_tipoidfiscal");';
-	scriptaux +='});';
-
-	scriptaux +='</script>';
-
-	$("#modal_proveedor").on('show.bs.modal', function () {
-		
-		$('#modal_proveedor').append(scriptaux);
-		
-    });
-
-    scriptaux ='';
-	scriptaux +='<script>';
-
-	scriptaux +='$("input[name='+aux2+']").change(function() {';
-	scriptaux +='	validar_chkpersonafisica("nuevo_cifnif", "nuevo_tipoidfiscal");';
-	scriptaux +='});';
-
-	scriptaux +='</script>';
-
-    $("#modal_cliente").on('show.bs.modal', function () {
-		
-		$('#modal_cliente').append(scriptaux);
-		
-    });
-
-    aux2= "'cifnif'";
-	aux = 'input[name='+aux2+']';
-	$('form[name="f_nuevo_cliente"]').append('<input type="hidden" name="scriptaux" value="0"/>');
-
-	scriptaux += '<script>';
-	scriptaux += '$("'+aux+'").keyup(function() {';
-	scriptaux += '	validar($(this).val()); ';
-	scriptaux += '}); ';
-
-	aux2= "'personafisica'";
-	scriptaux += '$("input[name='+aux2+']").change(function() {';
-	scriptaux +='	validar_chkpersonafisica("cifnif", "tipoidfiscal");';
-	scriptaux += '}); ';
-
-	scriptaux +='</script>';
-
-    $("#modal_nuevo_cliente").on('show.bs.modal', function () {
-
-    	if ($('input[name="scriptaux"]').val() == '0') {
-			$('form[name="f_nuevo_cliente"]').append(scriptaux);
-			$('input[name="scriptaux"]').val('1');
-			$('button[type="submit"]').attr('disabled',true);
-		}
-		
-		$('#modal_nuevo_cliente').append(scriptaux);
-		
-    });
 
 });

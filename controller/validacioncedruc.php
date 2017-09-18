@@ -21,50 +21,40 @@ class validacioncedruc extends fs_controller
 
          $cedruc = trim($_POST['cedruc']);
 
-         if ($_POST['perfisica'] == 'true') {
-            // validar CI
-            $data['men'] =$_POST['perfisica'].' '.$_POST['tipfiscal'];
-            if ($_POST['tipfiscal'] == 'Cedula') {
-               if ($validador->validarCedula($cedruc)) {
-                  $data['mensaje'] = 'Cédula válida';
-                  $data['estatus'] = '1';
-               } else {
-                  $data['mensaje'] = 'Cédula incorrecta: '.$validador->getError();
-                  $data['estatus'] = '0';
-               }
-            }elseif ($_POST['tipfiscal'] == 'R.U.C') {
-               //validar RUC persona natural
-               if ($validador->validarRucPersonaNatural($cedruc)) {
-                  $data['mensaje'] = 'RUC válido';
-                  $data['estatus'] = '1';
-               } else {
-                  $data['mensaje'] ='RUC incorrecto: '.$validador->getError();
-                  $data['estatus'] = '0';
-               }
-            }
-           
-         }else{
+         $tipfiscal = $_POST['tipfiscal'];
 
-            if ($_POST['pribpubli'] == 'true') {
-               // validar RUC sociedad privada
-               if ($validador->validarRucSociedadPrivada($cedruc)) {
-                  $data['mensaje'] = 'RUC privado válido';
-                  $data['estatus'] = '1';
-               } else {
-                  $data['mensaje'] ='RUC privado incorrecto: '.$validador->getError();
-                  $data['estatus'] = '0';
-               }
-            }else{
-               // validar RUC sociedad publica
-               if ($validador->validarRucSociedadPublica($cedruc)) {
-                  $data['mensaje'] = 'RUC publico válido';
-                  $data['estatus'] = '1';
-               } else {
-                  $data['mensaje'] ='RUC publico incorrecto: '.$validador->getError();
-                  $data['estatus'] = '0';
-               }
-            }
+         if ($_POST['perfisica'] == 'true') {
+            $perfisica = 'persona física';
+         }else{
+            $perfisica = 'empresa';
          }
+
+         if ($validador->validarCedula($cedruc)) {
+            // validar CI
+            $data['mensaje'] = 'Cédula válida';
+            $data['estatus'] = '1';
+            $data['tipoval'] = 'CPE';
+         } elseif ($validador->validarRucPersonaNatural($cedruc)) {
+            // validar RUC persona natural
+            $data['mensaje'] = 'RUC persona física válido';
+            $data['estatus'] = '1';
+            $data['tipoval'] = 'RPE';
+         } elseif ($validador->validarRucSociedadPrivada($cedruc)) {
+            // validar RUC sociedad Privada
+            $data['mensaje'] = 'RUC privado válido';
+            $data['estatus'] = '1';
+            $data['tipoval'] = 'RPI';
+         } elseif ($validador->validarRucSociedadPublica($cedruc)) {
+            // validar RUC sociedad publica
+            $data['mensaje'] = 'RUC publico válido';
+            $data['estatus'] = '1';
+            $data['tipoval'] = 'RPU';
+         } else {
+            // Error general
+            $data['mensaje'] =$tipfiscal.' '.$perfisica.' empresa incorrecto: '.$validador->getError();
+            $data['estatus'] = '0';
+         }
+           
          echo json_encode($data);
       }
 
