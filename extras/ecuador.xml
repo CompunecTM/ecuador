@@ -720,6 +720,29 @@
       <coddivisa>USD</coddivisa>
    </subcuenta>
    <subcuenta>
+      <codcuenta>1135</codcuenta>
+      <codsubcuenta>1135004</codsubcuenta>
+      <descripcion>UklWQSAxMDAlIEhvbm9yYXJpb3M=</descripcion>
+      <coddivisa>USD</coddivisa>
+   </subcuenta>
+   <subcuenta>
+      <codcuenta>1135</codcuenta>
+      <codsubcuenta>1135005</codsubcuenta>
+      <descripcion>UklWQSAxMDAlIEFycmllbmRvIFAgTmF0</descripcion>
+      <coddivisa>USD</coddivisa>
+   </subcuenta>
+   <subcuenta>
+      <codcuenta>1135</codcuenta>
+      <codsubcuenta>1135006</codsubcuenta>
+      <descripcion>UklWQSA3MCUgU2VydmljaW9z</descripcion>
+      <coddivisa>USD</coddivisa></subcuenta>
+   <subcuenta>
+      <codcuenta>1135</codcuenta>
+      <codsubcuenta>1135007</codsubcuenta>
+      <descripcion>UklWQSAzMCUgQmllbmVz</descripcion>
+      <coddivisa>USD</coddivisa>
+   </subcuenta>
+   <subcuenta>
       <codcuenta>1141</codcuenta>
       <codsubcuenta>1141001</codsubcuenta>
       <descripcion>SW52ZW50YXJpbyBNYXRlcmlhIFByaW1h</descripcion>
