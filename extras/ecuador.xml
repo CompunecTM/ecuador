@@ -1490,7 +1490,7 @@
    <subcuenta>
       <codcuenta>1134</codcuenta>
       <codsubcuenta>1134999</codsubcuenta>
-      <descripcion>UkZJUiBFbXBsZWFkb3MgUmVsYWMuIERlcGVuZGVuY2lh</descripcion>
+      <descripcion>UmV0ZW5jaW9uZXMgYWN1bXVsYWRhcyBkZSBSRU5UQSB2ZW50YXM=</descripcion>
       <coddivisa>USD</coddivisa>
    </subcuenta>
    <subcuenta>
@@ -1532,6 +1532,12 @@
       <codcuenta>1135</codcuenta>
       <codsubcuenta>1135007</codsubcuenta>
       <descripcion>UklWQSAzMCUgQmllbmVz</descripcion>
+      <coddivisa>USD</coddivisa>
+   </subcuenta>
+   <subcuenta>
+      <codcuenta>1135</codcuenta>
+      <codsubcuenta>1135999</codsubcuenta>
+      <descripcion>UmV0ZW5jaW9uZXMgYWN1bXVsYWRhcyBkZSBJVkEgdmVudGFz</descripcion>
       <coddivisa>USD</coddivisa>
    </subcuenta>
    <subcuenta>
@@ -1646,12 +1652,6 @@
       <codcuenta>2111</codcuenta>
       <codsubcuenta>2111001</codsubcuenta>
       <descripcion>T2JsaWdhY2lvbmVzIEJhbmNhcmlhcyBDb3J0byBQbGF6bw==</descripcion>
-      <coddivisa>USD</coddivisa>
-   </subcuenta>
-   <subcuenta>
-      <codcuenta>2121</codcuenta>
-      <codsubcuenta>2121001</codsubcuenta>
-      <descripcion>cmljaGFycmQ=</descripcion>
       <coddivisa>USD</coddivisa>
    </subcuenta>
    <subcuenta>
@@ -1814,6 +1814,12 @@
       <codcuenta>2134</codcuenta>
       <codsubcuenta>2134009</codsubcuenta>
       <descripcion>SVZBIDUwJSBQcmVzdGFjacOzbiBkZSBPdHJvcyBTZXJ2aWNpb3M=</descripcion>
+      <coddivisa>USD</coddivisa>
+   </subcuenta>
+   <subcuenta>
+      <codcuenta>2134</codcuenta>
+      <codsubcuenta>2134999</codsubcuenta>
+      <descripcion>UmV0ZW5jaW9uZXMgYWN1bXVsYWRhcyBkZSBJVkEgY29tcHJhcw==</descripcion>
       <coddivisa>USD</coddivisa>
    </subcuenta>
    <subcuenta>
@@ -2612,6 +2618,12 @@
       <codcuenta>2135</codcuenta>
       <codsubcuenta>2135137</codsubcuenta>
       <descripcion>NTA1IC0gMjIlIFBhZ28gYWwgZXh0ZXJpb3IgLSBSZW5kaW1pZW50b3MgZmluYW5jaWVyb3M=</descripcion>
+      <coddivisa>USD</coddivisa>
+   </subcuenta>
+   <subcuenta>
+      <codcuenta>2135</codcuenta>
+      <codsubcuenta>2135999</codsubcuenta>
+      <descripcion>UmV0ZW5jaW9uZXMgYWN1bXVsYWRhcyBkZSBSRU5UQSBjb21wcmFz</descripcion>
       <coddivisa>USD</coddivisa>
    </subcuenta>
    <subcuenta>
